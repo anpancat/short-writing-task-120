@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { db, collection, addDoc } from "firebase/firestore";
-import { auth, signInAnonymously, onAuthStateChanged } from "./firebaseConfig";
+import { auth } from "./firebaseConfig"; // firebase 인증 모듈 불러오기
+import { signInAnonymously, onAuthStateChanged } from "./firebase/auth";
 
 export default function WritingTest() {
   const [userId, setUserId] = useState(null); // 🔥 UID 저장할 상태 추가
@@ -120,6 +121,8 @@ export default function WritingTest() {
     }
   }, [fullTextIndex, isFullTextTyping]);
 
+
+  // 🔥 컴포넌트가 렌더링될 때 익명 로그인 실행
   useEffect(() => {
     const signIn = async () => {
       try {
@@ -133,7 +136,7 @@ export default function WritingTest() {
 
 
     // 🔥 로그인 상태 변화 감지 → UID 저장
-    onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log("📌 existing login deticted, UID:", user.uid);
         setUserId(user.uid); // ✅ UID 저장
@@ -141,7 +144,10 @@ export default function WritingTest() {
         signIn(); // 🔥 로그인되지 않은 경우 익명 로그인
       }
     });
+
+    return () => unsubscribe(); // 컴포넌트 언마운트 시 감지 중지
   }, []);
+
 
   // 🔥 Firestore에 UID와 함께 데이터 저장하는 함수 추가
   const handleSubmit = async () => {
