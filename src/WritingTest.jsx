@@ -21,26 +21,31 @@ const fetchUserSubmissions = async (userId) => {
   }
 };
 
+const [userId, setUserId] = useState(null); // 🔥 UID 저장할 상태 추
+const [isAuthReady, setIsAuthReady] = useState(false); // 로그인 상태 확인 상태 추가
+
+
 useEffect(() => {
-  const authenticateUser = async () => {
-    try {
-      // 🔥 익명 로그인 수행 (사용자가 로그인하지 않은 경우)
-      await signInAnonymously(auth);
+  signInAnonymously(auth)
+    .then(() => {
+      console.log("✅ 익명 로그인 성공!");
+    })
+    .catch((error) => {
+      console.error("❌ 익명 로그인 실패:", error);
+    });
 
-      // 🔥 로그인 상태 변경 감지하여 UID 가져오기
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          setUserId(user.uid); // 🔥 익명 로그인한 사용자 UID 저장
-          fetchUserSubmissions(user.uid); // 🔥 같은 사용자의 제출 데이터를 가져오기
-        }
-      });
-    } catch (error) {
-      console.error("❌ 익명 로그인 실패:", error.message);
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      console.log("✅ 현재 사용자 UID:", user.uid);
+      setUserId(user.uid);
+      setIsAuthReady(true); //로그인 완료료
+    } else {
+      console.log("❌ 사용자 정보 없음");
+      setIsAuthReady(false);
     }
-  };
-
-  authenticateUser();
+  });
 }, []);
+
 
 export default function WritingTest() {
   const [userId, setUserId] = useState(null); // 🔥 UID 저장할 상태 추가
@@ -163,6 +168,8 @@ export default function WritingTest() {
 
   // 🔥 Firestore에 UID와 함께 데이터 저장하는 함수 추가
   const handleSubmit = async () => {
+    console.log("✅ 현재 userId:" , userId); //디버깅용 로그 추가
+
     if (!userId) {
       alert("⚠️ User ID not found. Please try again.");
       return;
@@ -255,6 +262,7 @@ export default function WritingTest() {
 
         <button  // submit 버튼
           onClick={handleSubmit} 
+          disabled={!isAuthReady} // 로그인 완료 전까지 버튼 비활성화화
           style={{ marginTop: "15px", padding: "10px 20px", backgroundColor: "#007bff", color: "white", border: "none", cursor: "pointer", fontSize: "16px" }}
         >
           Submit
