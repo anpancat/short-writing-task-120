@@ -1,7 +1,46 @@
 import { useState, useEffect } from "react";
-import { db, collection, addDoc } from "firebase/firestore";
+import { db, collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import { auth } from "./firebaseConfig"; // firebase 인증 모듈 불러오기
 import { signInAnonymously, onAuthStateChanged } from "./firebase/auth";
+
+const fetchUserSubmissions = async (userId) => {
+  if (!userId) return;
+
+  try {
+    const q = query(collection(db, "writingData"), where("userId", "==", userId)); // 🔥 같은 userId 필터링
+    const querySnapshot = await getDocs(q);
+
+    const submissions = [];
+    querySnapshot.forEach((doc) => {
+      submissions.push(doc.data());
+    });
+
+    console.log(`📝 사용자 ${userId}의 제출 데이터:`, submissions);
+  } catch (error) {
+    console.error("❌ Firestore에서 데이터 불러오기 실패:", error.message);
+  }
+};
+
+useEffect(() => {
+  const authenticateUser = async () => {
+    try {
+      // 🔥 익명 로그인 수행 (사용자가 로그인하지 않은 경우)
+      await signInAnonymously(auth);
+
+      // 🔥 로그인 상태 변경 감지하여 UID 가져오기
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          setUserId(user.uid); // 🔥 익명 로그인한 사용자 UID 저장
+          fetchUserSubmissions(user.uid); // 🔥 같은 사용자의 제출 데이터를 가져오기
+        }
+      });
+    } catch (error) {
+      console.error("❌ 익명 로그인 실패:", error.message);
+    }
+  };
+
+  authenticateUser();
+}, []);
 
 export default function WritingTest() {
   const [userId, setUserId] = useState(null); // 🔥 UID 저장할 상태 추가
@@ -122,33 +161,6 @@ export default function WritingTest() {
   }, [fullTextIndex, isFullTextTyping]);
 
 
-  // 🔥 컴포넌트가 렌더링될 때 익명 로그인 실행
-  useEffect(() => {
-    const signIn = async () => {
-      try {
-        const userCredential = await signInAnonymously(auth);
-        console.log("✅ Anonymous login success! UID:", userCredential.user.uid);
-        setUserId(userCredential.user.uid);
-      } catch (error) {
-        console.error("❌ Anonymous login error:", error.message);
-      }
-    };
-
-
-    // 🔥 로그인 상태 변화 감지 → UID 저장
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log("📌 existing login deticted, UID:", user.uid);
-        setUserId(user.uid); // ✅ UID 저장
-      } else {
-        signIn(); // 🔥 로그인되지 않은 경우 익명 로그인
-      }
-    });
-
-    return () => unsubscribe(); // 컴포넌트 언마운트 시 감지 중지
-  }, []);
-
-
   // 🔥 Firestore에 UID와 함께 데이터 저장하는 함수 추가
   const handleSubmit = async () => {
     if (!userId) {
@@ -201,15 +213,16 @@ export default function WritingTest() {
 
       //firebase에 UID 포함하여 데이터에 저장
       await addDoc(collection(db, "writingData"), {
-        userId: userId, // ✅ UID 저장
         text: text,
         wordCount: wordCount,
-        timestamp: formattedKoreaTime  // ✅ 한국 시간으로 변환한 값 저장
+        timestamp: formattedKoreaTime,  // ✅ 한국 시간으로 변환한 값 저장
+        userId: userId, // ✅ UID 저장
       });
 
       alert("✅ Your writing has been submitted!");
       setText("");
       setWordCount(0);
+      setWarning("");
     } catch (error) {
       console.error("🔥 An error occurred while saving data:", error.message);
       alert(`🔥 An error occurred while saving data: ${error.message}`);
