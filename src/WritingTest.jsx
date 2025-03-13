@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
-import { db, collection, addDoc } from "./firebaseConfig"; // 🔥 Firestore 연동
+import { db, collection, addDoc } from "firebase/firestore";
+import { auth, signInAnonymously, onAuthStateChanged } from "./firebaseConfig";
 
 export default function WritingTest() {
+  const [userId, setUserId] = useState(null); // 🔥 UID 저장할 상태 추가
   const [text, setText] = useState("");
   const [wordCount, setWordCount] = useState(0);
   const requiredWords = ["sunglasses", "dogs", "doctors"];
@@ -118,8 +120,27 @@ export default function WritingTest() {
     }
   }, [fullTextIndex, isFullTextTyping]);
 
-  // 🔥 Firestore에 데이터 저장하는 함수 추가
+  useEffect(() => {
+    // 🔥 익명 로그인 실행
+    signInAnonymously(auth).catch((error) => {
+      console.error("Anonymous sign-in error:", error);
+    });
+
+    // 🔥 로그인 상태 변화 감지 → UID 저장
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserId(user.uid); // ✅ UID 저장
+      }
+    });
+  }, []);
+
+  // 🔥 Firestore에 UID와 함께 데이터 저장하는 함수 추가
   const handleSubmit = async () => {
+    if (!userId) {
+      alert("⚠️ User ID not found. Please try again later.");
+      return;
+    }
+
     let errorMessages = []; 
 
     // 단어 수 체크
@@ -163,8 +184,9 @@ export default function WritingTest() {
 
       const formattedKoreaTime = formatter.format(koreaTime);
 
-      //firebase 데이터에 저장
+      //firebase에 UID 포함하여 데이터에 저장
       await addDoc(collection(db, "writingData"), {
+        userId: userId, // ✅ UID 저장
         text: text,
         wordCount: wordCount,
         timestamp: formattedKoreaTime  // ✅ 한국 시간으로 변환한 값 저장
@@ -173,7 +195,6 @@ export default function WritingTest() {
       alert("✅ Your writing has been submitted!");
       setText("");
       setWordCount(0);
-      setWarning("");
     } catch (error) {
       console.error("🔥 An error occurred while saving data:", error.message);
       alert(`🔥 An error occurred while saving data: ${error.message}`);

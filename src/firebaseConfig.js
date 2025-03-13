@@ -1,5 +1,6 @@
 // Firebase SDK 가져오기
 import { initializeApp } from "firebase/app";
+import { getAuth, signInAnonymously, onAuthStateChanged } from "firebase/auth";
 import { getFirestore, collection, addDoc, getDocs } from "firebase/firestore"; 
 
 const firebaseConfig = {
@@ -14,5 +15,7 @@ const firebaseConfig = {
 // Firebase 앱 초기화
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
 
-export { db, collection, addDoc, getDocs };
+
+export { db, auth, signInAnonymously, onAuthStateChanged, collection, addDoc, getDocs };
