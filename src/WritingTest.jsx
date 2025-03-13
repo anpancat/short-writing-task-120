@@ -6,14 +6,23 @@ export default function WritingTest() {
   const [wordCount, setWordCount] = useState(0);
   const requiredWords = ["sunglasses", "dogs", "doctors"];
   const [displayText, setDisplayText] = useState("");
-  const typingText = "...DraftMind가 입력 중입니다...";
-  const fullText = "도입부에서 주요 캐릭터와 배경을 더 구체적으로 수정, 보완하면 원하시는 글이 완성될 것 같아요.";
+
+  const typingText = "...DraftMind is typing..."; //입력중
+  const hello = "Hello! I’m 'Draft Mind,' an AI designed to help with writing. \n It looks like you’re crafting a story. I’d be happy to assist!"; // 인사말
+  const level = "Based on general writing principles and storytelling strategies, I will provide assistance that is generally suitable for writers like you."; // 개인화 수준 명시(낮은 개인화)
+  const fullText = "To maintain this style while developing your story into a more engaging narrative, it would be beneficial to describe the introduction in more detail. \n This will enhance the immersion of your story. Try adjusting it as shown in the example below! \n \n ex) 'A gentle breeze carried the scent of earth and rain, weaving through the quiet streets as the distant hum of city life echoed in the background. \n The dim glow of streetlights flickered softly, casting long shadows that stretched across the pavement.'"; // 도움 내용(낮은 개인화)&예시시
 
   const [typingIndex, setTypingIndex] = useState(0);
+  const [helloIndex, setHelloIndex] = useState(0);
+  const [levelIndex, setLevelIndex] = useState(0);
   const [fullTextIndex, setFullTextIndex] = useState(0);
+
   const [isTypingTextComplete, setIsTypingTextComplete] = useState(false);
+  const [isHelloTyping, setIsHelloTyping] = useState(false);
+  const [isLevelTyping, setIsLevelTyping] = useState(false);
   const [isFullTextTyping, setIsFullTextTyping] = useState(false);
   const [hasTriggeredOnce, setHasTriggeredOnce] = useState(false);
+
   const [warning, setWarning] = useState("");
   const [missingWords, setMissingWords] = useState([]);
 
@@ -79,9 +88,15 @@ export default function WritingTest() {
     if (wordCount >= 30 && !hasTriggeredOnce) {
       setDisplayText("");
       setTypingIndex(0);
+      setHelloIndex(0);
+      setLevelIndex(0);
       setFullTextIndex(0);
+
       setIsTypingTextComplete(false);
+      setIsHelloTyping(false);
+      setIsLevelTyping(false);
       setIsFullTextTyping(false);
+
       setHasTriggeredOnce(true);
     }
   }, [wordCount, hasTriggeredOnce]);
@@ -90,9 +105,9 @@ export default function WritingTest() {
   useEffect(() => {
     if (hasTriggeredOnce && !isTypingTextComplete && typingIndex < typingText.length) {
       const timer = setTimeout(() => {
-        setDisplayText((prev) => prev + typingText[typingIndex]);
+        setDisplayText(typingText.slice(0, typingIndex + 1));
         setTypingIndex(typingIndex + 1);
-      }, 150);
+      }, 100);
 
       return () => clearTimeout(timer);
     }
@@ -100,17 +115,55 @@ export default function WritingTest() {
     if (typingIndex === typingText.length && !isTypingTextComplete) {
       setTimeout(() => {
         setIsTypingTextComplete(true);
-        setDisplayText("");
+        setDisplayText(""); // 다음 메시지 시작 전 초기화
+        setIsHelloTyping(true);
+      }, 3000);
+    }
+  }, [typingIndex, isTypingTextComplete, hasTriggeredOnce]);
+
+  // 인사말 타이핑효과
+  useEffect(() => {
+    if (isHelloTyping && helloIndex < hello.length) {
+      const timer = setTimeout(() => {
+        setDisplayText(hello.slice(0, helloIndex + 1));
+        setHelloIndex(helloIndex + 1);
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+
+    if (helloIndex === hello.length) {
+      setTimeout(() => {
+        setDisplayText(""); // 개인화수준 타이핑 시작 전 초기화
+        setIsHelloTyping(false);
+        setIsLevelTyping(true);
+      }, 5000);
+    }
+  }, [helloIndex, isHelloTyping]);
+
+  // 개인화 수준 타이핑효과
+  useEffect(() => {
+    if (isLevelTyping && levelIndex < level.length) {
+      const timer = setTimeout(() => {
+        setDisplayText(level.slice(0, levelIndex + 1));
+        setLevelIndex(levelIndex + 1);
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+
+    if (levelIndex === level.length) {
+      setTimeout(() => {
+        setDisplayText(""); // 다음 메시지 시작 전 초기화
+        setIsLevelTyping(false);
         setIsFullTextTyping(true);
       }, 5000);
     }
-  }, [typingIndex, isTypingTextComplete, hasTriggeredOnce]);
+  }, [levelIndex, isLevelTyping]);
 
   // AI 글쓰기 제안문구 타이핑효과
   useEffect(() => {
     if (isFullTextTyping && fullTextIndex < fullText.length) {
       const timer = setTimeout(() => {
-        setDisplayText((prev) => prev + fullText[fullTextIndex]);
+        setDisplayText(fullText.slice(0, fullTextIndex + 1));
         setFullTextIndex(fullTextIndex + 1);
       }, 50);
 
@@ -182,21 +235,56 @@ export default function WritingTest() {
   };
 
   return (
-    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginTop: "20px" }}>
-      <div style={{ width: "48%" }}>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
+          
+      {/* 사용자가 글 작성하는 영역 */}
+      <div style={{ width: "80%", textAlign: "left", marginBottom: "10px" }}> 
         <h1>📝 Short Writing Task</h1>
         <p>Write a prompt (150-200 words) about the following nouns:</p>
         <p style={{ color: "red", fontWeight: "bold" }}>eg. {requiredWords.join(", ")}</p>
         <p className="mt-2">Word Count: {wordCount}</p>
 
         <textarea
-          style={{ width: "120%", height: "260px", padding: "10px", border: "1px solid #ccc", fontSize: "16px" }}
+          style={{ width: "100%", height: "200px", padding: "10px", border: "1px solid #ccc", fontSize: "16px" }}
           value={text}
-          onChange={handleChange}
+          onChange={(e) => handleChange(e)}
           placeholder="Start writing here..."
         />
+      </div>
 
-        {warning.length > 0 && (
+      {/* AI DraftMind의 출력이 나타나는 영역 */}
+      <div 
+        style={{ 
+          width: "78.5%",
+          marginLeft: "21px", 
+          padding: "20px",
+          border: "1px solid #ccc",
+          backgroundColor: "#f9f9f9",
+          textAlign: "center",
+          overflow: "visible", // 출력내용이 많아지면 자동으로 출력창 크기 조절
+          wordBreak: "break-word", // 단어가 이상하게 끊기는 문제 해결
+          whiteSpace: "pre-wrap", // \n을 줄바꿈으로 인식
+        }}
+      >
+        <h2 style={{ marginTop: "3px", textAlign: "center" }}> <em>AI DraftMind</em>🪶 Writing Suggestion</h2>
+        <p style={{ marginBottom: "30px", fontSize: "12px", textAlign: "center", color: "gray" }}>
+          DraftMind is an AI that assists with writing by reading your text and providing suggestions to help you improve your writing.
+        </p>
+
+        {/* 🔥 displayText가 비어있지 않을 때만 문장별로 나누어 출력 */}
+        {hasTriggeredOnce && displayText.trim() !== "" && 
+          displayText
+            .replaceAll(", ", ",\u00A0") // 쉼표 뒤 공백을 불간섭 공백으로 대체하여 줄바꿈 방지
+            .split("\n")
+            .map((line, index) => (
+              <p key={index} style={{ fontWeight: "bold", fontSize: "15px", whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
+                {line}
+              </p>
+            ))
+          }
+      </div>
+
+      {warning.length > 0 && (
           <div style={{ color: "red", fontWeight: "bold", fontSize: "16px", marginTop: "10px" }}>
             {warning.map((msg, index) => (
               <p key={index} style={{ margin: "5px 0" }}>❌ {msg}</p>
@@ -204,21 +292,16 @@ export default function WritingTest() {
           </div>
         )}
 
+      {/* Submit 버튼 - 가장 아래로 배치 */}
+      <button 
+        onClick={handleSubmit} 
+        style={{ 
+          marginTop: "10px", padding: "12px 25px", backgroundColor: "#007bff", 
+          color: "white", border: "none", cursor: "pointer", fontSize: "16px", fontWeight: "bold"
+        }}>
+        Submit
+      </button>
 
-        <button  // submit 버튼
-          onClick={handleSubmit} 
-          style={{ marginTop: "15px", padding: "10px 20px", backgroundColor: "#007bff", color: "white", border: "none", cursor: "pointer", fontSize: "16px" }}
-        >
-          Submit
-        </button>
-      </div>
-      <div style={{ width: "39%", height: "260px", border: "1px solid #ccc", padding: "10px", backgroundColor: "#f9f9f9", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "198px" }}>
-        <h2 style={{ marginBottom: "10px", textAlign: "center" }}> <em>AI DraftMind</em>🪶 Writing Suggestion</h2>
-        <p style={{ fontSize: "12px", textAlign: "center", color: "gray" }}>DraftMind is an AI that assists with writing by reading your text and providing suggestions to help you improve your writing.</p>
-        {hasTriggeredOnce && (
-          <p style={{ fontWeight: "bold", textAlign: "center" }}>{displayText}</p>
-        )}
-      </div>
     </div>
   );
 }
