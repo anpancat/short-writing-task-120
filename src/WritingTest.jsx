@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { db, collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import { auth } from "./firebaseConfig"; // firebase 인증 모듈 불러오기
-import { signInAnonymously, onAuthStateChanged } from "./firebase/auth";
+import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
 
 const fetchUserSubmissions = async (userId) => {
   if (!userId) return;
