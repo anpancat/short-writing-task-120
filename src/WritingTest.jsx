@@ -268,7 +268,7 @@ export default function WritingTest() {
           Submit
         </button>
       </div>
-      <div style={{ width: "38%", height: "260px", border: "1px solid #ccc", padding: "10px", backgroundColor: "#f9f9f9", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "198px" }}>
+      <div style={{ width: "39%", height: "260px", border: "1px solid #ccc", padding: "10px", backgroundColor: "#f9f9f9", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "198px" }}>
         <h2 style={{ marginBottom: "10px", textAlign: "center" }}> <em>AI DraftMind</em>🪶 Writing Suggestion</h2>
         <p style={{ fontSize: "12px", textAlign: "center", color: "gray" }}>DraftMind is an AI that assists with writing by reading your text and providing suggestions to help you improve your writing.</p>
         {hasTriggeredOnce && (
