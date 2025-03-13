@@ -15,7 +15,8 @@ const firebaseConfig = {
 // Firebase 앱 초기화
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const auth = getAuth();
+const auth = getAuth(app);
 
 
 export { db, auth, signInAnonymously, onAuthStateChanged, collection, addDoc, getDocs };
+export default auth;
