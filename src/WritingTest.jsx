@@ -137,7 +137,7 @@ export default function WritingTest() {
   // 🔥 Firestore에 UID와 함께 데이터 저장하는 함수 추가
   const handleSubmit = async () => {
     if (!userId) {
-      alert("⚠️ User ID not found. Please try again later.");
+      alert("⚠️ User ID not found. Please try again.");
       return;
     }
 
