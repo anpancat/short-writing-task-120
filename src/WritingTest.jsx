@@ -121,15 +121,24 @@ export default function WritingTest() {
   }, [fullTextIndex, isFullTextTyping]);
 
   useEffect(() => {
-    // 🔥 익명 로그인 실행
-    signInAnonymously(auth).catch((error) => {
-      console.error("Anonymous sign-in error:", error);
-    });
+    const signIn = async () => {
+      try {
+        const userCredential = await signInAnonymously(auth);
+        console.log("✅ Anonymous login success! UID:", userCredential.user.uid);
+        setUserId(userCredential.user.uid);
+      } catch (error) {
+        console.error("❌ Anonymous login error:", error.message);
+      }
+    };
+
 
     // 🔥 로그인 상태 변화 감지 → UID 저장
     onAuthStateChanged(auth, (user) => {
       if (user) {
+        console.log("📌 existing login deticted, UID:", user.uid);
         setUserId(user.uid); // ✅ UID 저장
+      } else {
+        signIn(); // 🔥 로그인되지 않은 경우 익명 로그인
       }
     });
   }, []);
