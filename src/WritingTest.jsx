@@ -1,54 +1,7 @@
 import { useState, useEffect } from "react";
-import { db, collection, addDoc, query, where, getDocs } from "firebase/firestore";
-import auth  from "./firebaseConfig"; // firebase 인증 모듈 불러오기
-import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
-
-const fetchUserSubmissions = async (userId) => {
-  if (!userId) return;
-
-  try {
-    const q = query(collection(db, "writingData"), where("userId", "==", userId)); // 🔥 같은 userId 필터링
-    const querySnapshot = await getDocs(q);
-
-    const submissions = [];
-    querySnapshot.forEach((doc) => {
-      submissions.push(doc.data());
-    });
-
-    console.log(`📝 사용자 ${userId}의 제출 데이터:`, submissions);
-  } catch (error) {
-    console.error("❌ Firestore에서 데이터 불러오기 실패:", error.message);
-  }
-};
-
-const [userId, setUserId] = useState(null); // 🔥 UID 저장할 상태 추
-const [isAuthReady, setIsAuthReady] = useState(false); // 로그인 상태 확인 상태 추가
-
-
-useEffect(() => {
-  signInAnonymously(auth)
-    .then(() => {
-      console.log("✅ 익명 로그인 성공!");
-    })
-    .catch((error) => {
-      console.error("❌ 익명 로그인 실패:", error);
-    });
-
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      console.log("✅ 현재 사용자 UID:", user.uid);
-      setUserId(user.uid);
-      setIsAuthReady(true); //로그인 완료료
-    } else {
-      console.log("❌ 사용자 정보 없음");
-      setIsAuthReady(false);
-    }
-  });
-}, []);
-
+import { db, collection, addDoc } from "./firebaseConfig"; // firebase 인증 모듈 불러오기
 
 export default function WritingTest() {
-  const [userId, setUserId] = useState(null); // 🔥 UID 저장할 상태 추가
   const [text, setText] = useState("");
   const [wordCount, setWordCount] = useState(0);
   const requiredWords = ["sunglasses", "dogs", "doctors"];
@@ -166,15 +119,8 @@ export default function WritingTest() {
   }, [fullTextIndex, isFullTextTyping]);
 
 
-  // 🔥 Firestore에 UID와 함께 데이터 저장하는 함수 추가
+  // 🔥 Firestore에 데이터 저장하는 함수 추가
   const handleSubmit = async () => {
-    console.log("✅ 현재 userId:" , userId); //디버깅용 로그 추가
-
-    if (!userId) {
-      alert("⚠️ User ID not found. Please try again.");
-      return;
-    }
-
     let errorMessages = []; 
 
     // 단어 수 체크
@@ -223,7 +169,6 @@ export default function WritingTest() {
         text: text,
         wordCount: wordCount,
         timestamp: formattedKoreaTime,  // ✅ 한국 시간으로 변환한 값 저장
-        userId: userId, // ✅ UID 저장
       });
 
       alert("✅ Your writing has been submitted!");
@@ -262,7 +207,6 @@ export default function WritingTest() {
 
         <button  // submit 버튼
           onClick={handleSubmit} 
-          disabled={!isAuthReady} // 로그인 완료 전까지 버튼 비활성화화
           style={{ marginTop: "15px", padding: "10px 20px", backgroundColor: "#007bff", color: "white", border: "none", cursor: "pointer", fontSize: "16px" }}
         >
           Submit
