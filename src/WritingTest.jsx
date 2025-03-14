@@ -264,30 +264,59 @@ export default function WritingTest() {
           overflow: "visible", // 출력내용이 많아지면 자동으로 출력창 크기 조절
           wordBreak: "break-word", // 긴 단어가 출력창을 넘어가면 줄바꿈
           whiteSpace: "pre-wrap", // \n을 줄바꿈으로 인식
+          display: "flex",
+          flexDirection: "column", // 제목, 설명, 본문을 세로 정렬
+          alignItems: "center",
         }}>
 
         {/* 제목 */}
-        <h2 style={{ marginTop: "3px", textAlign: "center" }}> <em>AI DraftMind</em>🪶 Writing Suggestion</h2>
+        <h2 style={{ marginTop: "3px", textAlign: "center" }}> 
+          <em>AI DraftMind</em>🪶 Writing Suggestion
+        </h2>
        
         {/* 설명 */}
         <p style={{ marginBottom: "30px", fontSize: "12px", textAlign: "center", color: "gray" }}>
           DraftMind is an AI that assists with writing by reading your text and providing suggestions to help you improve your writing.
         </p>
 
-        {/* 본문 텍스트*/}
-        <div>
-        {hasTriggeredOnce && displayText.trim() !== "" && 
-          displayText
-            .replaceAll(", ", ",\u00A0") // 쉼표 뒤 공백을 불간섭 공백으로 대체하여 줄바꿈 방지
-            .split("\n")
-            .map((line, index) => (
-              <p key={index} style={{ fontWeight: "bold", fontSize: "15px", whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
-                {line}
-              </p>
-            ))
-          }
-        <div/>
+        {/* 본문 및 이미지 컨테이너 (병렬 배치) */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-start",
+            width: "100%",
+            marginTop: "10px",
+          }}
+        >
+
+        {/* AI 아이콘 (왼쪽) */}
+        <img
+          src="/images/DraftMind_image.png"
+          alt="AI Icon"
+          style={{
+            width: "60px",
+            height: "60px",
+            borderRadius: "50%", // 원형 이미지
+            marginRight: "15px", // 이미지와 본문 사이 간격
+            objectFit: "cover",
+          }}
+        />
+
+        {/* 본문 (오른쪽) */}
+        <div style={{ flex:1 }}>
+          {hasTriggeredOnce && displayText.trim() !== "" && 
+            displayText
+              .replaceAll(", ", ",\u00A0") // 쉼표 뒤 공백을 불간섭 공백으로 대체하여 줄바꿈 방지
+              .split("\n")
+              .map((line, index) => (
+                <p key={index} style={{ fontWeight: "bold", fontSize: "15px", whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
+                  {line}
+                </p>
+              ))}
         </div>
+      </div>
+
       {warning.length > 0 && (
           <div style={{ color: "red", fontWeight: "bold", fontSize: "16px", marginTop: "10px" }}>
             {warning.map((msg, index) => (
