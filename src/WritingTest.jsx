@@ -8,7 +8,7 @@ export default function WritingTest() {
   const [displayText, setDisplayText] = useState("");
 
   const typingText = "...DraftMind is typing..."; //입력중
-  const hello = "Hello! I’m 'Draft Mind,' an AI designed to help with writing. \n It looks like you’re crafting a story. I’d be happy to assist!"; // 인사말
+  const hello = "Hello! I’m 'Draft Mind', an AI designed to help with writing. \n It looks like you’re crafting a story. I’d be happy to assist!"; // 인사말
   const level = "Based on general writing principles and storytelling strategies, I will provide assistance that is generally suitable for writers like you."; // 개인화 수준 명시(낮은 개인화)
   const fullText = "To maintain this style while developing your story into a more engaging narrative, it would be beneficial to describe the introduction in more detail. \n This will enhance the immersion of your story. Try adjusting it as shown in the example below! \n \n ex) 'A gentle breeze carried the scent of earth and rain, weaving through the quiet streets as the distant hum of city life echoed in the background. \n The dim glow of streetlights flickered softly, casting long shadows that stretched across the pavement.'"; // 도움 내용(낮은 개인화)&예시시
 
@@ -117,7 +117,7 @@ export default function WritingTest() {
         setIsTypingTextComplete(true);
         setDisplayText(""); // 다음 메시지 시작 전 초기화
         setIsHelloTyping(true);
-      }, 3000);
+      }, 2000);
     }
   }, [typingIndex, isTypingTextComplete, hasTriggeredOnce]);
 
@@ -136,7 +136,7 @@ export default function WritingTest() {
         setDisplayText(""); // 개인화수준 타이핑 시작 전 초기화
         setIsHelloTyping(false);
         setIsLevelTyping(true);
-      }, 5000);
+      }, 2000);
     }
   }, [helloIndex, isHelloTyping]);
 
@@ -155,7 +155,7 @@ export default function WritingTest() {
         setDisplayText(""); // 다음 메시지 시작 전 초기화
         setIsLevelTyping(false);
         setIsFullTextTyping(true);
-      }, 5000);
+      }, 2000);
     }
   }, [levelIndex, isLevelTyping]);
 
@@ -260,18 +260,22 @@ export default function WritingTest() {
           padding: "20px",
           border: "1px solid #ccc",
           backgroundColor: "#f9f9f9",
-          textAlign: "center",
+          textAlign: "left",
           overflow: "visible", // 출력내용이 많아지면 자동으로 출력창 크기 조절
-          wordBreak: "break-word", // 단어가 이상하게 끊기는 문제 해결
+          wordBreak: "break-word", // 긴 단어가 출력창을 넘어가면 줄바꿈
           whiteSpace: "pre-wrap", // \n을 줄바꿈으로 인식
-        }}
-      >
+        }}>
+
+        {/* 제목 */}
         <h2 style={{ marginTop: "3px", textAlign: "center" }}> <em>AI DraftMind</em>🪶 Writing Suggestion</h2>
+       
+        {/* 설명 */}
         <p style={{ marginBottom: "30px", fontSize: "12px", textAlign: "center", color: "gray" }}>
           DraftMind is an AI that assists with writing by reading your text and providing suggestions to help you improve your writing.
         </p>
 
-        {/* 🔥 displayText가 비어있지 않을 때만 문장별로 나누어 출력 */}
+        {/* 본문 텍스트*/}
+        <div>
         {hasTriggeredOnce && displayText.trim() !== "" && 
           displayText
             .replaceAll(", ", ",\u00A0") // 쉼표 뒤 공백을 불간섭 공백으로 대체하여 줄바꿈 방지
@@ -282,8 +286,8 @@ export default function WritingTest() {
               </p>
             ))
           }
-      </div>
-
+        <div/>
+        </div>
       {warning.length > 0 && (
           <div style={{ color: "red", fontWeight: "bold", fontSize: "16px", marginTop: "10px" }}>
             {warning.map((msg, index) => (
@@ -291,6 +295,7 @@ export default function WritingTest() {
             ))}
           </div>
         )}
+        </div>
 
       {/* Submit 버튼 - 가장 아래로 배치 */}
       <button 
@@ -301,7 +306,6 @@ export default function WritingTest() {
         }}>
         Submit
       </button>
-
     </div>
   );
 }
