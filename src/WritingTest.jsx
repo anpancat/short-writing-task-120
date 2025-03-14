@@ -241,7 +241,7 @@ export default function WritingTest() {
       <div style={{ width: "80%", textAlign: "left", marginBottom: "10px" }}> 
         <h1>📝 Short Writing Task</h1>
         <p>Write a prompt (150-200 words) about the following nouns:</p>
-        <p style={{ color: "red", fontWeight: "bold" }}>eg. {requiredWords.join(", ")}</p>
+        <p style={{ color: "red", fontWeight: "bold" }}>{requiredWords.join(", ")}</p>
         <p className="mt-2">Word Count: {wordCount}</p>
 
         <textarea
@@ -316,7 +316,8 @@ export default function WritingTest() {
               ))}
         </div>
       </div>
-
+      </div>
+      {/* 경고 메시지 출력 */}
       {warning.length > 0 && (
           <div style={{ color: "red", fontWeight: "bold", fontSize: "16px", marginTop: "10px" }}>
             {warning.map((msg, index) => (
@@ -324,8 +325,6 @@ export default function WritingTest() {
             ))}
           </div>
         )}
-        </div>
-
       {/* Submit 버튼 - 가장 아래로 배치 */}
       <button 
         onClick={handleSubmit} 
@@ -335,6 +334,7 @@ export default function WritingTest() {
         }}>
         Submit
       </button>
+
     </div>
   );
 }
