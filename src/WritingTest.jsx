@@ -7,9 +7,6 @@ export default function WritingTest() {
   const requiredWords = ["sunglasses", "dogs", "doctors"];
   const [displayText, setDisplayText] = useState("");
 
-  // 🌟 Qualtrics ID 상태 추가
-  const [qualtricsId, setQualtricsId] = useState("");
-
   const typingText = "...DraftMind is typing..."; //입력중
   const hello = "Hello! I’m 'Draft Mind', an AI designed to help with writing. \n It looks like you’re crafting a story. I’d be happy to assist!"; // 인사말
   const level = "Based on general writing principles and storytelling strategies, I will provide assistance that is generally suitable for writers like you."; // 개인화 수준 명시(낮은 개인화)
@@ -28,6 +25,9 @@ export default function WritingTest() {
 
   const [warning, setWarning] = useState("");
   const [missingWords, setMissingWords] = useState([]);
+
+  // ✨ Qualtrics ID 상태 추가
+const [qualtricsId, setQualtricsId] = useState("");
 
   const handleChange = (e) => {
     const newText = e.target.value;
@@ -85,6 +85,7 @@ export default function WritingTest() {
     // 🔥 중복 제거 후 경고 메시지 설정
     setWarning([...new Set(warningMessages)]);
   };
+  
 
   useEffect(() => {
     if (wordCount >= 30 && !hasTriggeredOnce) {
@@ -178,10 +179,6 @@ export default function WritingTest() {
   const handleSubmit = async () => {
     let errorMessages = []; 
 
-    if (!qualtricsId.trim()) {
-      errorMessages.push("❌ Please enter your Qualtrics ID.");
-    }
-
     // 단어 수 체크
     if (wordCount < 150) {
       errorMessages.push("❌ Word count is too low (minimum 150 words).");
@@ -199,6 +196,11 @@ export default function WritingTest() {
     // 필수 단어 포함 여부 확인
     if (missingWords.length > 0) {
       errorMessages.push(`❌ The following words must be included: ${missingWords.join(", ")}`);
+    }
+
+    // ✨ Qualtrics ID 미입력 시 에러 메시지 추가
+    if (!qualtricsId.trim()) {
+      errorMessages.push("❌ Please enter your Qualtrics ID.");
     }
 
     // 🔥 오류 메시지가 하나라도 있으면 제출 불가
@@ -222,12 +224,20 @@ export default function WritingTest() {
       });
 
       const formattedKoreaTime = formatter.format(koreaTime);
-      
+
+      //firebase에 UID 포함하여 데이터에 저장
+      await addDoc(collection(db, "writingData"), {
+        qualtricsId: qualtricsId.trim(), // ✨ Qualtrics ID 저장
+        text: text,
+        wordCount: wordCount,
+        timestamp: formattedKoreaTime,  // ✅ 한국 시간으로 변환한 값 저장
+      });
+
       alert("✅ Your writing has been submitted!");
       setText("");
       setWordCount(0);
       setWarning("");
-      setQualtricsId("");
+      setQualtricsId(""); // ✨ 제출 성공 시 ID 초기화
     } catch (error) {
       console.error("🔥 An error occurred while saving data:", error.message);
       alert(`🔥 An error occurred while saving data: ${error.message}`);
@@ -252,6 +262,7 @@ export default function WritingTest() {
         />
       </div>
 
+      {/* ✨ Qualtrics ID 입력 필드 추가 */}
       <div style={{ width: "80%", textAlign: "left", marginBottom: "10px" }}>
         <label style={{ fontWeight: "bold", marginRight: "10px" }}>Qualtrics ID:</label>
         <input
@@ -262,6 +273,7 @@ export default function WritingTest() {
           style={{ padding: "5px", fontSize: "14px", width: "200px" }}
         />
       </div>
+
 
       {/* AI DraftMind의 출력이 나타나는 영역 */}
       <div 
@@ -336,7 +348,6 @@ export default function WritingTest() {
             ))}
           </div>
         )}
-      
       {/* Submit 버튼 - 가장 아래로 배치 */}
       <button 
         onClick={handleSubmit} 
