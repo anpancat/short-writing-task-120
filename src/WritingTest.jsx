@@ -229,7 +229,7 @@ export default function WritingTest() {
 
       //firebase에 UID 포함하여 데이터에 저장
       await addDoc(collection(db, "writingData"), {
-        qualtricsId: qualtricsId.trim(), // ✨ Qualtrics ID 저장
+        prolificId: prolificId.trim(), // ✨ prolific ID 저장
         text: text.trim(),
         wordCount: wordCount,
         timestamp: formattedKoreaTime,  // ✅ 한국 시간으로 변환한 값 저장
