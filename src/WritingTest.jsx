@@ -27,7 +27,8 @@ export default function WritingTest() {
   const [missingWords, setMissingWords] = useState([]);
 
   // ✨ Qualtrics ID 상태 추가
-const [qualtricsId, setQualtricsId] = useState("");
+  const [qualtricsId, setQualtricsId] = useState("");
+
 
   const handleChange = (e) => {
     const newText = e.target.value;
@@ -203,6 +204,7 @@ const [qualtricsId, setQualtricsId] = useState("");
       errorMessages.push("❌ Please enter your Qualtrics ID.");
     }
 
+
     // 🔥 오류 메시지가 하나라도 있으면 제출 불가
     if (errorMessages.length > 0) {
       alert(`⚠️ Submission failed for the following reasons:\n\n${errorMessages.join("\n")}`);
@@ -228,7 +230,7 @@ const [qualtricsId, setQualtricsId] = useState("");
       //firebase에 UID 포함하여 데이터에 저장
       await addDoc(collection(db, "writingData"), {
         qualtricsId: qualtricsId.trim(), // ✨ Qualtrics ID 저장
-        text: text,
+        text: text.trim(),
         wordCount: wordCount,
         timestamp: formattedKoreaTime,  // ✅ 한국 시간으로 변환한 값 저장
       });
