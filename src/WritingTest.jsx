@@ -336,17 +336,6 @@ export default function WritingTest() {
             ))}
           </div>
         )}
-
-      <div style={{ width: "80%", textAlign: "left", marginBottom: "10px" }}>
-        <label style={{ fontWeight: "bold", marginRight: "10px" }}>Qualtrics ID:</label>
-        <input
-          type="text"
-          value={qualtricsId}
-          onChange={(e) => setQualtricsId(e.target.value)}
-          placeholder="Enter your ID"
-          style={{ padding: "5px", fontSize: "14px", width: "200px" }}
-        />
-      </div>
       
       {/* Submit 버튼 - 가장 아래로 배치 */}
       <button 
