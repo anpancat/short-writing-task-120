@@ -27,7 +27,7 @@ export default function WritingTest() {
   const [missingWords, setMissingWords] = useState([]);
 
   // ✨ Qualtrics ID 상태 추가
-  const [qualtricsId, setQualtricsId] = useState("");
+  const [prolificId, setProlificId] = useState("");
 
 
   const handleChange = (e) => {
@@ -200,8 +200,8 @@ export default function WritingTest() {
     }
 
     // ✨ Qualtrics ID 미입력 시 에러 메시지 추가
-    if (!qualtricsId.trim()) {
-      errorMessages.push("❌ Please enter your Qualtrics ID.");
+    if (!prolificId.trim()) {
+      errorMessages.push("❌ Please enter your Prolific ID.");
     }
 
 
@@ -239,7 +239,7 @@ export default function WritingTest() {
       setText("");
       setWordCount(0);
       setWarning("");
-      setQualtricsId(""); // ✨ 제출 성공 시 ID 초기화
+      setProlificId(""); // ✨ 제출 성공 시 ID 초기화
     } catch (error) {
       console.error("🔥 An error occurred while saving data:", error.message);
       alert(`🔥 An error occurred while saving data: ${error.message}`);
@@ -264,13 +264,13 @@ export default function WritingTest() {
         />
       </div>
 
-      {/* ✨ Qualtrics ID 입력 필드 추가 */}
+      {/* ✨ Prolific ID 입력 필드 추가 */}
       <div style={{ width: "80%", textAlign: "left", marginBottom: "10px" }}>
-        <label style={{ fontWeight: "bold", marginRight: "10px" }}>Qualtrics ID:</label>
+        <label style={{ fontWeight: "bold", marginRight: "10px" }}>Prolific ID:</label>
         <input
           type="text"
-          value={qualtricsId}
-          onChange={(e) => setQualtricsId(e.target.value)}
+          value={prolificId}
+          onChange={(e) => setProlificId(e.target.value)}
           placeholder="Enter your ID"
           style={{ padding: "5px", fontSize: "14px", width: "200px" }}
         />
