@@ -7,6 +7,9 @@ export default function WritingTest() {
   const requiredWords = ["sunglasses", "dogs", "doctors"];
   const [displayText, setDisplayText] = useState("");
 
+  // 🌟 Qualtrics ID 상태 추가
+  const [qualtricsId, setQualtricsId] = useState("");
+
   const typingText = "...DraftMind is typing..."; //입력중
   const hello = "Hello! I’m 'Draft Mind', an AI designed to help with writing. \n It looks like you’re crafting a story. I’d be happy to assist!"; // 인사말
   const level = "Based on general writing principles and storytelling strategies, I will provide assistance that is generally suitable for writers like you."; // 개인화 수준 명시(낮은 개인화)
@@ -82,7 +85,6 @@ export default function WritingTest() {
     // 🔥 중복 제거 후 경고 메시지 설정
     setWarning([...new Set(warningMessages)]);
   };
-  
 
   useEffect(() => {
     if (wordCount >= 30 && !hasTriggeredOnce) {
@@ -176,6 +178,10 @@ export default function WritingTest() {
   const handleSubmit = async () => {
     let errorMessages = []; 
 
+    if (!qualtricsId.trim()) {
+      errorMessages.push("❌ Please enter your Qualtrics ID.");
+    }
+
     // 단어 수 체크
     if (wordCount < 150) {
       errorMessages.push("❌ Word count is too low (minimum 150 words).");
@@ -216,18 +222,12 @@ export default function WritingTest() {
       });
 
       const formattedKoreaTime = formatter.format(koreaTime);
-
-      //firebase에 UID 포함하여 데이터에 저장
-      await addDoc(collection(db, "writingData"), {
-        text: text,
-        wordCount: wordCount,
-        timestamp: formattedKoreaTime,  // ✅ 한국 시간으로 변환한 값 저장
-      });
-
+      
       alert("✅ Your writing has been submitted!");
       setText("");
       setWordCount(0);
       setWarning("");
+      setQualtricsId("");
     } catch (error) {
       console.error("🔥 An error occurred while saving data:", error.message);
       alert(`🔥 An error occurred while saving data: ${error.message}`);
@@ -249,6 +249,17 @@ export default function WritingTest() {
           value={text}
           onChange={(e) => handleChange(e)}
           placeholder="Start writing here..."
+        />
+      </div>
+
+      <div style={{ width: "80%", textAlign: "left", marginBottom: "10px" }}>
+        <label style={{ fontWeight: "bold", marginRight: "10px" }}>Qualtrics ID:</label>
+        <input
+          type="text"
+          value={qualtricsId}
+          onChange={(e) => setQualtricsId(e.target.value)}
+          placeholder="Enter your ID"
+          style={{ padding: "5px", fontSize: "14px", width: "200px" }}
         />
       </div>
 
@@ -325,6 +336,18 @@ export default function WritingTest() {
             ))}
           </div>
         )}
+
+      <div style={{ width: "80%", textAlign: "left", marginBottom: "10px" }}>
+        <label style={{ fontWeight: "bold", marginRight: "10px" }}>Qualtrics ID:</label>
+        <input
+          type="text"
+          value={qualtricsId}
+          onChange={(e) => setQualtricsId(e.target.value)}
+          placeholder="Enter your ID"
+          style={{ padding: "5px", fontSize: "14px", width: "200px" }}
+        />
+      </div>
+      
       {/* Submit 버튼 - 가장 아래로 배치 */}
       <button 
         onClick={handleSubmit} 
