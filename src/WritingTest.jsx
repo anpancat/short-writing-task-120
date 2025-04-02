@@ -189,7 +189,7 @@ export default function WritingTest() {
     }
 
     // 영어 여부 검사
-    const englishPattern = /^[a-zA-Z0-9.,!"'\s\n&;:$%#@~?)(><}{=-_+*^/]*$/;
+    const englishPattern = /^[a-zA-Z0-9.,!"'\s\n&;:\$%#@~?)(><}{=-_+*^\/]*$/;
     if (!englishPattern.test(text)) {
       errorMessages.push("❌ Your text contains non-English characters.");
     }
