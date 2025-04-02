@@ -37,7 +37,7 @@ export default function WritingTest() {
     let warningMessages = []; // 여러 개의 경고 메시지를 저장할 배열
   
     // 🔥 영어 여부 검사 (영어 이외 문자가 포함되면 경고)
-    const englishPattern = /^[a-zA-Z0-9.,!"'\s\n:;-_&*%~)(><?+=]*$/;
+    const englishPattern = new RegExp("^[a-zA-Z0-9\\s.,!\"'\\$%&@#\\^*(){}\\[\\]<>?=:_+\\-;\\\\|/~`\\/]*$");
     const containsKorean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(newText); // 한글 포함 여부 확인
   
     if (!englishPattern.test(newText) || containsKorean) {
