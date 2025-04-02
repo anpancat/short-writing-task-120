@@ -96,7 +96,7 @@ export default function WritingTest() {
   
 
   useEffect(() => {
-    if (wordCount >= 30 && !hasTriggeredOnce) {
+    if (wordCount >= 120 && !hasTriggeredOnce) {
       setDisplayText("");
       setTypingIndex(0);
       setHelloIndex(0);
@@ -235,7 +235,7 @@ export default function WritingTest() {
       const formattedKoreaTime = formatter.format(koreaTime);
 
       //firebase에 UID 포함하여 데이터에 저장
-      await addDoc(collection(db, "writingData"), {
+      await addDoc(collection(db, "writingData120"), {
         prolificId: prolificId.trim(), // ✨ prolific ID 저장
         text: text.trim(),
         wordCount: wordCount,
