@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react";
 import { db, collection, addDoc } from "./firebaseConfig"; // firebase 인증 모듈 불러오기
 
+// 퀄트릭스로 돌아ㅏ기
+const getReturnURL = () => {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("return") || "https://kupsychology.qualtrics.com/jfe/form/SV_3UHLDLvsQJNq0fQ"; // fallback 주소 (없을 경우)
+};
+
+
 export default function WritingTest() {
   const [text, setText] = useState("");
   const [wordCount, setWordCount] = useState(0);
@@ -240,6 +247,9 @@ export default function WritingTest() {
       setWordCount(0);
       setWarning("");
       setProlificId(""); // ✨ 제출 성공 시 ID 초기화
+
+      window.location.href = getReturnURL(); // 제출후 퀄트릭스로 돌아가기
+
     } catch (error) {
       console.error("🔥 An error occurred while saving data:", error.message);
       alert(`🔥 An error occurred while saving data: ${error.message}`);
