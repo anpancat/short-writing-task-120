@@ -248,6 +248,7 @@ export default function WritingTest() {
       setWarning("");
       setProlificId(""); // ✨ 제출 성공 시 ID 초기화
 
+      console.log("🔁 Returning to:", getReturnURL()); 
       window.location.href = getReturnURL(); // 제출후 퀄트릭스로 돌아가기
 
     } catch (error) {
