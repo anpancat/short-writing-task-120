@@ -4,7 +4,13 @@ import { db, collection, addDoc } from "./firebaseConfig"; // firebase 인증 �
 // 퀄트릭스로 돌아가가기
 const getReturnURL = () => {
   const params = new URLSearchParams(window.location.search);
-  return params.get("return") || "https://kupsychology.qualtrics.com/jfe/form/SV_3UHLDLvsQJNq0fQ";
+  const returnBase = params.get("return") || "https://kupsychology.qualtrics.com/jfe/form/SV_3UHLDLvsQJNq0fQ"; 
+  const responseID = params.get("responseID");
+  
+  if (!responseID) return returnBase; // responseID가 없으면 기본 URL 반환
+
+  const connector = returnBase.includes("?") ? "&" : "?";
+  return `${returnBase}${connector}Q_R=${responseID}`;
 };
 
 
