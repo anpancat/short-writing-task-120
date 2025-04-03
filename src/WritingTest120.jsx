@@ -188,6 +188,13 @@ export default function WritingTest() {
     }
   }, [fullTextIndex, isFullTextTyping]);
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const responseID = params.get("responseID");
+    console.log("✅ responseID:", responseID);
+  }, []);
+  
+
 
   // 🔥 Firestore에 데이터 저장하는 함수 추가
   const handleSubmit = async () => {
