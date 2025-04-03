@@ -9,8 +9,8 @@ const getReturnURL = () => {
   
   if (!responseID) return returnBase; // responseID가 없으면 기본 URL 반환
 
-  const connector = returnBase.includes("?") ? "&" : "?";
-  return `${returnBase}${connector}Q_R=${responseID}`;
+    // ✅ ResponseID를 설문 링크에 붙여서 퀄트릭스가 이어받을 수 있게 함
+  return `${returnBase}?Q_R=${responseID}`;
 };
 
 
