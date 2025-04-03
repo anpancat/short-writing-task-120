@@ -1,19 +1,6 @@
 import { useState, useEffect } from "react";
 import { db, collection, addDoc } from "./firebaseConfig"; // firebase 인증 모듈 불러오기
 
-// 퀄트릭스로 돌아가가기
-const getReturnURL = () => {
-  const params = new URLSearchParams(window.location.search);
-  const returnBase = params.get("return") || "https://kupsychology.qualtrics.com/jfe/form/SV_3UHLDLvsQJNq0fQ"; 
-  const responseID = params.get("responseID");
-  
-  if (!responseID) return returnBase; // responseID가 없으면 기본 URL 반환
-
-    // ✅ ResponseID를 설문 링크에 붙여서 퀄트릭스가 이어받을 수 있게 함
-  return `${returnBase}?Q_R=${responseID}`;
-};
-
-
 export default function WritingTest() {
   const [text, setText] = useState("");
   const [wordCount, setWordCount] = useState(0);
@@ -188,13 +175,6 @@ export default function WritingTest() {
     }
   }, [fullTextIndex, isFullTextTyping]);
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const responseID = params.get("responseID");
-    console.log("✅ responseID:", responseID);
-  }, []);
-  
-
 
   // 🔥 Firestore에 데이터 저장하는 함수 추가
   const handleSubmit = async () => {
@@ -260,16 +240,6 @@ export default function WritingTest() {
       setWordCount(0);
       setWarning("");
       setProlificId(""); // ✨ 제출 성공 시 ID 초기화
-
-      const returnURL = getReturnURL();
-
-      if (window.opener && !window.opener.closed) {
-        window.opener.location.href = returnURL;
-        window.close();
-      } else {
-        window.location.href = returnURL;
-      }
-      
 
     } catch (error) {
       console.error("🔥 An error occurred while saving data:", error.message);
