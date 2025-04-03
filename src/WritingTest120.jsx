@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { db, collection, addDoc } from "./firebaseConfig"; // firebase 인증 모듈 불러오기
 
-// 퀄트릭스로 돌아ㅏ기
+// 퀄트릭스로 돌아가가기
 const getReturnURL = () => {
   const params = new URLSearchParams(window.location.search);
-  return params.get("return") || "https://kupsychology.qualtrics.com/jfe/form/SV_3UHLDLvsQJNq0fQ"; // fallback 주소 (없을 경우)
+  return params.get("return") || "https://kupsychology.qualtrics.com/jfe/form/SV_3UHLDLvsQJNq0fQ";
 };
 
 
