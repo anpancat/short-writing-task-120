@@ -27,7 +27,6 @@ export default function WritingTest() {
   const [isLevelTyping, setIsLevelTyping] = useState(false);
   const [isFullTextTyping, setIsFullTextTyping] = useState(false);
   const [hasTriggeredOnce, setHasTriggeredOnce] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const [warning, setWarning] = useState("");
   const [missingWords, setMissingWords] = useState([]);
@@ -246,7 +245,6 @@ export default function WritingTest() {
       setWordCount(0);
       setWarning("");
       setProlificId(""); // ✨ 제출 성공 시 ID 초기화
-      setIsSubmitted(true);
 
 
       console.log("🔁 Returning to:", getReturnURL());
@@ -373,25 +371,6 @@ export default function WritingTest() {
         }}>
         Submit
       </button>
-
-      <a href={getReturnURL()}>
-        <button
-          disabled={!isSubmitted}
-          style={{
-            marginTop: "20px",
-            padding: "10px 20px",
-            backgroundColor: isSubmitted ? "#28a745" : "#ccc",
-            color: "white",
-            fontWeight: "bold",
-            border: "none",
-            borderRadius: "5px",
-            cursor: isSubmitted ? "pointer" : "not-allowed",
-            fontSize: "16px",
-            opacity: isSubmitted ? 1 : 0.5
-          }}>
-          Return to survey
-        </button>
-      </a>
 
     </div>
   );
