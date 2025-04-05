@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import { db, collection, addDoc } from "./firebaseConfig"; // firebase 인증 모듈 불러오기
 
+const getReturnURL = () => {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("return") || "https://kupsychology.qualtrics.com/jfe/form/SV_3UHLDLvsQJNq0fQ";
+};
+
 export default function WritingTest() {
   const [text, setText] = useState("");
   const [wordCount, setWordCount] = useState(0);
@@ -241,6 +246,11 @@ export default function WritingTest() {
       setWarning("");
       setProlificId(""); // ✨ 제출 성공 시 ID 초기화
 
+      console.log("🔁 Returning to:", getReturnURL());
+      
+      // 🎯 퀄트릭스로 다시 이동
+      window.location.href = getReturnURL();
+
     } catch (error) {
       console.error("🔥 An error occurred while saving data:", error.message);
       alert(`🔥 An error occurred while saving data: ${error.message}`);
@@ -360,32 +370,6 @@ export default function WritingTest() {
         }}>
         Submit
       </button>
-
-      {/* 설문으로 돌아가기 버튼 (퀄트릭스) */}
-      <button
-        onClick={() => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const responseId = urlParams.get("ResponseID");
-            if (responseId) {
-              window.location.href = `https://kupsychology.qualtrics.com/jfe/form/SV_3UHLDLvsQJNq0fQ?ResponseID=${responseId}`;
-            } else {
-              alert("ResponseID not found in URL.");
-            }
-          }}
-          style={{
-            marginTop: "20px",
-            padding: "10px 20px",
-            backgroundColor: "#28a745",
-            color: "white",
-            fontWeight: "bold",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-            fontSize: "16px"
-          }}
-        >
-          Return to Survey
-        </button>      
 
     </div>
   );
