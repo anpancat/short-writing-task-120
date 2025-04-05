@@ -247,7 +247,7 @@ export default function WritingTest() {
       setProlificId(""); // ✨ 제출 성공 시 ID 초기화
 
       console.log("🔁 Returning to:", getReturnURL());
-      
+
       // 🎯 퀄트릭스로 다시 이동
       window.location.href = getReturnURL();
 
@@ -370,6 +370,10 @@ export default function WritingTest() {
         }}>
         Submit
       </button>
+
+      <a href={getReturnURL()}>
+        <button style={{ marginTop: "20px" }}>설문 계속하기</button>
+      </a>
 
     </div>
   );
