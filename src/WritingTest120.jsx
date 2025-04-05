@@ -372,7 +372,19 @@ export default function WritingTest() {
       </button>
 
       <a href={getReturnURL()}>
-        <button style={{ marginTop: "20px" }}>설문 계속하기</button>
+        <button style={{ marginTop: "20px" }}>return to survey
+          style={{
+            marginTop: "20px",
+            padding: "10px 20px",
+            backgroundColor: "#28a745",
+            color: "white",
+            fontWeight: "bold",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+            fontSize: "16px"
+          }}
+        </button>
       </a>
 
     </div>
