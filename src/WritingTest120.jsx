@@ -372,7 +372,7 @@ export default function WritingTest() {
       </button>
 
       <a href={getReturnURL()}>
-        <button style={{ marginTop: "20px" }}>return to survey
+        <button
           style={{
             marginTop: "20px",
             padding: "10px 20px",
@@ -383,7 +383,8 @@ export default function WritingTest() {
             borderRadius: "5px",
             cursor: "pointer",
             fontSize: "16px"
-          }}
+          }}>
+          Return to survey
         </button>
       </a>
 
