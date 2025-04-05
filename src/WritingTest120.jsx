@@ -26,7 +26,7 @@ export default function WritingTest() {
   const [warning, setWarning] = useState("");
   const [missingWords, setMissingWords] = useState([]);
 
-  // ✨ Qualtrics ID 상태 추가
+  // ✨ Prolific ID 상태 추가
   const [prolificId, setProlificId] = useState("");
 
 
@@ -360,6 +360,32 @@ export default function WritingTest() {
         }}>
         Submit
       </button>
+
+      {/* 설문으로 돌아가기 버튼 (퀄트릭스) */}
+      <button
+        onClick={() => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const responseId = urlParams.get("ResponseID");
+            if (responseId) {
+              window.location.href = `https://kupsychology.qualtrics.com/jfe/form/SV_3UHLDLvsQJNq0fQ?ResponseID=${responseId}`;
+            } else {
+              alert("ResponseID not found in URL.");
+            }
+          }}
+          style={{
+            marginTop: "20px",
+            padding: "10px 20px",
+            backgroundColor: "#28a745",
+            color: "white",
+            fontWeight: "bold",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+            fontSize: "16px"
+          }}
+        >
+          Return to Survey
+        </button>      
 
     </div>
   );
