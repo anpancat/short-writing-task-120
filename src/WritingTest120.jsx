@@ -15,7 +15,7 @@ export default function WritingTest() {
   const typingText = "...DraftMind is typing..."; //입력중
   const hello = "Hello! I’m 'Draft Mind', an AI designed to help with writing. \n It looks like you’re crafting a story. I’d be happy to assist!"; // 인사말
   const level = "Based on general writing principles and storytelling strategies, I will provide assistance that is generally suitable for writers like you."; // 개인화 수준 명시(낮은 개인화)
-  const fullText = "To maintain this style while developing your story into a more engaging narrative, it would be beneficial to describe the introduction in more detail. \n This will enhance the immersion of your story. Try adjusting it as shown in the example below! \n \n ex) 'A gentle breeze carried the scent of earth and rain, weaving through the quiet streets as the distant hum of city life echoed in the background. \n The dim glow of streetlights flickered softly, casting long shadows that stretched across the pavement.'"; // 도움 내용(낮은 개인화)&예시시
+  const fullText = "To maintain this style while developing your story into a more engaging narrative, it would be beneficial to describe the introduction in more detail. \n This will enhance the immersion of your story. I'll give you an example sentence below, so apply it to your writing! \n \n ex) 'A gentle breeze carried the scent of earth and rain, weaving through the quiet streets as the distant hum of city life echoed in the background. The dim glow of streetlights flickered softly, casting long shadows that stretched across the pavement.' \n ex 2) 'The room was filled with a soft, golden light as the sun dipped below the horizon, painting the sky with streaks of amber and violet. A faint rustling sound came from the corner, breaking the stillness of the evening air.'"; // 도움 내용
 
   const [typingIndex, setTypingIndex] = useState(0);
   const [helloIndex, setHelloIndex] = useState(0);
@@ -116,7 +116,7 @@ export default function WritingTest() {
       const timer = setTimeout(() => {
         setDisplayText(typingText.slice(0, typingIndex + 1));
         setTypingIndex(typingIndex + 1);
-      }, 100);
+      }, 50);
 
       return () => clearTimeout(timer);
     }
@@ -126,7 +126,7 @@ export default function WritingTest() {
         setIsTypingTextComplete(true);
         setDisplayText(""); // 다음 메시지 시작 전 초기화
         setIsHelloTyping(true);
-      }, 2000);
+      }, 1000);
     }
   }, [typingIndex, isTypingTextComplete, hasTriggeredOnce]);
 
@@ -136,7 +136,7 @@ export default function WritingTest() {
       const timer = setTimeout(() => {
         setDisplayText(hello.slice(0, helloIndex + 1));
         setHelloIndex(helloIndex + 1);
-      }, 50);
+      }, 35);
       return () => clearTimeout(timer);
     }
 
@@ -145,7 +145,7 @@ export default function WritingTest() {
         setDisplayText(""); // 개인화수준 타이핑 시작 전 초기화
         setIsHelloTyping(false);
         setIsLevelTyping(true);
-      }, 2000);
+      }, 1000);
     }
   }, [helloIndex, isHelloTyping]);
 
@@ -155,7 +155,7 @@ export default function WritingTest() {
       const timer = setTimeout(() => {
         setDisplayText(level.slice(0, levelIndex + 1));
         setLevelIndex(levelIndex + 1);
-      }, 50);
+      }, 35);
       return () => clearTimeout(timer);
     }
 
@@ -164,7 +164,7 @@ export default function WritingTest() {
         setDisplayText(""); // 다음 메시지 시작 전 초기화
         setIsLevelTyping(false);
         setIsFullTextTyping(true);
-      }, 2000);
+      }, 1000);
     }
   }, [levelIndex, isLevelTyping]);
 
@@ -174,7 +174,7 @@ export default function WritingTest() {
       const timer = setTimeout(() => {
         setDisplayText(fullText.slice(0, fullTextIndex + 1));
         setFullTextIndex(fullTextIndex + 1);
-      }, 50);
+      }, 35);
 
       return () => clearTimeout(timer);
     }
