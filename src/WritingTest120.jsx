@@ -28,12 +28,20 @@ export default function WritingTest() {
   const [isFullTextTyping, setIsFullTextTyping] = useState(false);
   const [hasTriggeredOnce, setHasTriggeredOnce] = useState(false);
 
+  const [isInputDisabled, setIsInputDisabled] = useState(false);
+  const [showInputLockMessage, setShowInputLockMessage] = useState(false);
+
   const [warning, setWarning] = useState("");
   const [missingWords, setMissingWords] = useState([]);
 
   // ✨ Prolific ID 상태 추가
   const [prolificId, setProlificId] = useState("");
 
+  // 🔥 입력 잠금 메시지 상태 추가
+  useEffect(() => {
+    if (isInputDisabled) setShowInputLockMessage(true);
+    else setShowInputLockMessage(false);
+  }, [isInputDisabled]);
 
   const handleChange = (e) => {
     const newText = e.target.value;
@@ -63,7 +71,7 @@ export default function WritingTest() {
   
       // 🔥 중복 단어 비율 계산 (전체 단어의 50% 이상이 동일한 단어면 경고)
       const overusedWords = Object.entries(wordCounts)
-        .filter(([_, count]) => count / words.length > 0.5)
+        .filter(([_, count]) => count / words.length > 0.3)
         .map(([word]) => word);
   
       let filteredWords = words;
@@ -83,7 +91,7 @@ export default function WritingTest() {
     );
   
     setMissingWords(missing);
-  
+
     if (missing.length > 0) {
       warningMessages.push(`The following words must be included: ${missing.join(", ")}`);
     }
@@ -177,6 +185,12 @@ export default function WritingTest() {
       }, 35);
 
       return () => clearTimeout(timer);
+    }
+    if (isFullTextTyping && fullTextIndex >= fullText.length) {
+      setTimeout(() => {
+        setIsFullTextTyping(false);
+        setIsInputDisabled(false); // ✅ 입력창창 다시 활성화
+      }, 1000);
     }
   }, [fullTextIndex, isFullTextTyping]);
 
@@ -273,7 +287,14 @@ export default function WritingTest() {
           value={text}
           onChange={(e) => handleChange(e)}
           placeholder="Start writing here..."
+          disabled={isInputDisabled} // ✅ 비활성화 반영
         />
+
+        {showInputLockMessage && (
+          <p style={{ color: "gray", fontWeight: "bold", fontSize: "14px", marginTop: "5px" }}>
+            ✨ DraftMind is writing. Please wait for seconds...
+          </p>
+        )}
       </div>
 
       {/* ✨ Prolific ID 입력 필드 추가 */}
