@@ -103,6 +103,7 @@ export default function WritingTest() {
 
   useEffect(() => {
     if (wordCount >= 120 && !hasTriggeredOnce) {
+      setIsInputDisabled(true); // ✅ 입력창 비활성화 추가
       setDisplayText("");
       setTypingIndex(0);
       setHelloIndex(0);
