@@ -156,7 +156,7 @@ export default function WritingTest() {
         setDisplayText(""); // 개인화수준 타이핑 시작 전 초기화
         setIsHelloTyping(false);
         setIsLevelTyping(true);
-      }, 1000);
+      }, 1500);
     }
   }, [helloIndex, isHelloTyping]);
 
@@ -175,7 +175,7 @@ export default function WritingTest() {
         setDisplayText(""); // 다음 메시지 시작 전 초기화
         setIsLevelTyping(false);
         setIsFullTextTyping(true);
-      }, 1000);
+      }, 1500);
     }
   }, [levelIndex, isLevelTyping]);
 
@@ -192,8 +192,8 @@ export default function WritingTest() {
     if (isFullTextTyping && fullTextIndex >= fullText.length) {
       setTimeout(() => {
         setIsFullTextTyping(false);
-        setIsInputDisabled(false); // ✅ 입력창창 다시 활성화
-      }, 1000);
+        setIsInputDisabled(false); // ✅ 입력창 다시 활성화
+      }, 1500);
     }
   }, [fullTextIndex, isFullTextTyping]);
 
