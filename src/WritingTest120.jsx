@@ -125,7 +125,6 @@ export default function WritingTest() {
         setDisplayText(typingText.slice(0, typingIndex + 1));
         setTypingIndex(typingIndex + 1);
       }, 50);
-
       return () => clearTimeout(timer);
     }
 
