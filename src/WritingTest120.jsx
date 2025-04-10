@@ -281,7 +281,7 @@ export default function WritingTest() {
       {/* 사용자가 글 작성하는 영역 */}
       <div style={{ width: "80%", textAlign: "left", marginBottom: "10px" }}> 
         <h1>📝 Short Writing Task</h1>
-        <p>Write a prompt (150-200 words) about the following nouns:</p>
+        <p>Write a prompt (150-200 words) about the following words:</p>
         <p style={{ color: "red", fontWeight: "bold" }}>{requiredWords.join(", ")}</p>
         <p className="mt-2">Word Count: {wordCount}</p>
 
