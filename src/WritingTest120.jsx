@@ -147,7 +147,7 @@ export default function WritingTest() {
       const timer = setTimeout(() => {
         setDisplayText(hello.slice(0, helloIndex + 1));
         setHelloIndex(helloIndex + 1);
-      }, 35);
+      }, 25);
       return () => clearTimeout(timer);
     }
 
@@ -156,7 +156,7 @@ export default function WritingTest() {
         setDisplayText(""); // 개인화수준 타이핑 시작 전 초기화
         setIsHelloTyping(false);
         setIsLevelTyping(true);
-      }, 1500);
+      }, 2000);
     }
   }, [helloIndex, isHelloTyping]);
 
@@ -166,7 +166,7 @@ export default function WritingTest() {
       const timer = setTimeout(() => {
         setDisplayText(level.slice(0, levelIndex + 1));
         setLevelIndex(levelIndex + 1);
-      }, 35);
+      }, 25);
       return () => clearTimeout(timer);
     }
 
@@ -175,7 +175,7 @@ export default function WritingTest() {
         setDisplayText(""); // 다음 메시지 시작 전 초기화
         setIsLevelTyping(false);
         setIsFullTextTyping(true);
-      }, 1500);
+      }, 2000);
     }
   }, [levelIndex, isLevelTyping]);
 
@@ -185,7 +185,7 @@ export default function WritingTest() {
       const timer = setTimeout(() => {
         setDisplayText(fullText.slice(0, fullTextIndex + 1));
         setFullTextIndex(fullTextIndex + 1);
-      }, 35);
+      }, 20);
 
       return () => clearTimeout(timer);
     }
@@ -193,7 +193,7 @@ export default function WritingTest() {
       setTimeout(() => {
         setIsFullTextTyping(false);
         setIsInputDisabled(false); // ✅ 입력창 다시 활성화
-      }, 1500);
+      }, 2000);
     }
   }, [fullTextIndex, isFullTextTyping]);
 
