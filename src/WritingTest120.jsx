@@ -386,6 +386,11 @@ export default function WritingTest() {
             ))}
           </div>
         )}
+
+      <span style={{ marginTop: "20px", fontSize: "16px", color: "gray" }}>
+        ✅Please make sure to complete the survey after submitting.
+      </span>
+
       {/* Submit 버튼 - 가장 아래로 배치 */}
       <button 
         onClick={handleSubmit} 
