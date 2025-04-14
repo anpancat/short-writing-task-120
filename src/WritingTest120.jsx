@@ -103,7 +103,7 @@ export default function WritingTest() {
   
 
   useEffect(() => {
-    if (wordCount >= 120 && !hasTriggeredOnce) {
+    if (wordCount >= 80 && !hasTriggeredOnce) {
       setIsInputDisabled(true); // ✅ 입력창 비활성화 추가
       setHasFeedbackStarted(true); // ✅ 피드백 시작 표시
 
@@ -203,11 +203,11 @@ export default function WritingTest() {
     let errorMessages = []; 
 
     // 단어 수 체크
-    if (wordCount < 150) {
-      errorMessages.push("❌ Word count is too low (minimum 150 words).");
+    if (wordCount < 100) {
+      errorMessages.push("❌ Word count is too low (minimum 100 words).");
     }
-    if (wordCount > 200) {
-      errorMessages.push("❌ Word count exceeds the limit (maximum 200 words).");
+    if (wordCount > 150) {
+      errorMessages.push("❌ Word count exceeds the limit (maximum 150 words).");
     }
 
     // 영어 여부 검사
@@ -281,7 +281,7 @@ export default function WritingTest() {
       {/* 사용자가 글 작성하는 영역 */}
       <div style={{ width: "80%", textAlign: "left", marginBottom: "10px" }}> 
         <h1>📝 Short Writing Task</h1>
-        <p>Write a prompt (150-200 words) about the following words:</p>
+        <p>Write a prompt (100-150 words) about the following words:</p>
         <p style={{ color: "red", fontWeight: "bold" }}>{requiredWords.join(", ")}</p>
         <p className="mt-2">Word Count: {wordCount}</p>
 
