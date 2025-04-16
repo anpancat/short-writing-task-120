@@ -238,7 +238,7 @@ export default function WritingTest() {
     try {
       // 예시 단어 매칭 개수 및 비율 계산
       const lowerText = text.toLowerCase()
-      const matchedKeywords = exampleKeywords.filter(phrase => lowerText.includes(phrase));
+      const matchedKeywords = exampleKeywords.filter(phrase => lowerText.includes(phrase.toLowerCase())); // 대소문자 구분없이 매칭
       const exampleWordCount = matchedKeywords.length; // 예시단어 매칭 개수
       const exampleWordRatio = +(exampleWordCount / exampleKeywords.length).toFixed(2); // 예시단어 반영비율
 
