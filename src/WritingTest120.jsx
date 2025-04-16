@@ -194,7 +194,7 @@ export default function WritingTest() {
       setTimeout(() => {
         setIsFullTextTyping(false);
         setIsInputDisabled(false); // ✅ 입력창 다시 활성화
-      }, 2000);
+      }, 1000);
     }
   }, [fullTextIndex, isFullTextTyping]);
 
@@ -236,12 +236,8 @@ export default function WritingTest() {
 
     try {
       // 예시 단어 매칭 개수 및 비율 계산
-      const lowerTextWords = text
-      .toLowerCase()
-      .replace(/[.,!?]/g, "") // 문장부호 제거
-      .split(/\s+/);
-
-      const matchedKeywords = exampleKeywords.filter(word => lowerTextWords.includes(word));
+      const lowerText = text.toLowerCase()
+      const matchedKeywords = exampleKeywords.filter(phrase => lowerText.includes(phrase));
       const exampleWordCount = matchedKeywords.length; // 예시단어 매칭 개수
       const exampleWordRatio = +(exampleWordCount / exampleKeywords.length).toFixed(2); // 예시단어 반영비율
 
