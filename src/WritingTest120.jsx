@@ -17,8 +17,9 @@ export default function WritingTest() {
   const level = "Based on general writing principles and storytelling strategies, I will provide assistance that is generally suitable for writers like you."; // 개인화 수준 명시(낮은 개인화)
   const fullText = "In general, to develop a story into a more engaging narrative, it would be beneficial to describe the introduction in more detail. This will enhance the immersion of the story. \n I'll give you an example sentence below, so apply it to your writing! \n \n ex 1) 'A gentle breeze carried the scent of earth and rain, weaving through the quiet streets as the distant hum of city life echoed in the background. The dim glow of streetlights flickered softly, casting long shadows that stretched across the pavement.' \n ex 2) 'There was a soft, golden light as the sun dipped below the horizon, painting the sky with streaks of amber and violet. A faint rustling sound came from the corner, breaking the stillness of the evening air.'"; // 도움 내용
 
-  const exampleKeywords = ["a gentle breeze", "the scent of earth and rain", "weaving through the quiet streets", "as the distant hum of city life", "echoed in the background", "the dim glow of streetlights", "flickered softly", "casting long shadows", "stretched across the pavement", "a soft, golden light", "golden light", "the sun dipped below the horizon", "painting the sky with streaks of amber and violet", "A faint rustling sound came from the corner", "breaking the stillness of the evening air"];  // 예시 단어들
-  
+  const examplePhrase = ["a gentle breeze", "the scent of earth and rain", "weaving through the quiet streets", "as the distant hum of city life", "echoed in the background", "the dim glow of streetlights", "flickered softly", "casting long shadows", "stretched across the pavement", "a soft, golden light", "golden light", "the sun dipped below the horizon", "painting the sky with streaks of amber and violet", "A faint rustling sound came from the corner", "breaking the stillness of the evening air"];  // 예시 구문문들
+  const exampleKeywords = ["gentle", "breeze", "scent", "earth", "rain", "weaving", "quiet", "streets", "distant", "hum", "city", "life", "echoed", "background", "dim", "glow", "streetlights", "flickered", "softly", "casting", "long", "shadows", "stretched", "pavement", "soft", "golden", "light", "sun", "dipped", "horizon", "painting", "sky", "streaks", "amber", "violet", "faint", "rustling", "sound", "came", "corner", "breaking", "stillness", "evening", "air"]; // 예시 단어들
+
   const [typingIndex, setTypingIndex] = useState(0);
   const [helloIndex, setHelloIndex] = useState(0);
   const [levelIndex, setLevelIndex] = useState(0);
@@ -236,10 +237,15 @@ export default function WritingTest() {
     }
 
     try {
-      // 예시 단어 매칭 개수 및 비율 계산
+      // 예시 구문 매칭 개수 및 비율 계산
       const lowerText = text.toLowerCase()
-      const matchedKeywords = exampleKeywords.filter(phrase => lowerText.includes(phrase.toLowerCase())); // 대소문자 구분없이 매칭
-      const exampleWordCount = matchedKeywords.length; // 예시단어 매칭 개수
+      const matchedPhrase = examplePhrase.filter(phrase => lowerText.includes(phrase.toLowerCase())); // 대소문자 구분없이 매칭
+      const examplePhraseCount = matchedPhrase.length; // 예시구문 매칭 개수
+      const examplePhraseRatio = +(examplePhraseCount / examplePhrase.length).toFixed(2); // 예시구문 반영비율
+
+      //예시 단어 매칭 개수 및 비율 계산
+      const matchedWords = exampleKeywords.filter(word => lowerText.includes(word.toLowerCase())); // 대소문자 구분없이 매칭
+      const exampleWordCount = matchedWords.length; // 예시단어 매칭 개수
       const exampleWordRatio = +(exampleWordCount / exampleKeywords.length).toFixed(2); // 예시단어 반영비율
 
       // 현재 한국 시간(KST) 가져오기
@@ -264,7 +270,9 @@ export default function WritingTest() {
         wordCount: wordCount,
         timestamp: formattedKoreaTime,  // ✅ 한국 시간으로 변환한 값 저장
         exampleWordCount: exampleWordCount, // 예시단어 매칭개수
-        exampleWordRatio: exampleWordRatio // 예시단어 매칭비율
+        exampleWordRatio: exampleWordRatio, // 예시단어 매칭비율
+        examplePhraseCount: examplePhraseCount, // 예시구문 매칭개수
+        examplePhraseRatio: examplePhraseRatio // 예시구문 매칭비율
       });
 
       alert("✅ Your writing has been submitted!");
