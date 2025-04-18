@@ -271,10 +271,10 @@ export default function WritingTest() {
         timestamp: formattedKoreaTime,  // ✅ 한국 시간으로 변환한 값 저장
         exampleWordCount: exampleWordCount, // 예시단어 매칭개수
         exampleWordRatio: exampleWordRatio, // 예시단어 매칭비율
-        exampleWords: matchedWords, // 예시단어 매칭된 단어들
+        exampleWords: matchedWords.join(", "), // 예시단어 매칭된 단어들
         examplePhraseCount: examplePhraseCount, // 예시구문 매칭개수
         examplePhraseRatio: examplePhraseRatio, // 예시구문 매칭비율
-        examplePhrase: matchedPhrase // 예시구문 매칭된 구문들
+        examplePhrase: matchedPhrase.join(", ") // 예시구문 매칭된 구문들
       });
 
       alert("✅ Your writing has been submitted!");
