@@ -244,7 +244,11 @@ export default function WritingTest() {
       const examplePhraseRatio = +(examplePhraseCount / examplePhrase.length).toFixed(2); // 예시구문 반영비율
 
       //예시 단어 매칭 개수 및 비율 계산
-      const matchedWords = exampleKeywords.filter(word => lowerText.includes(word.toLowerCase())); // 대소문자 구분없이 매칭
+      const textWords = lowerText.match(/\b\w+\b/g) || []; // 텍스트에서 단어만 추출 (문장부호 제거됨)
+      const matchedWords = exampleKeywords.filter(keyword =>
+        textWords.includes(keyword.toLowerCase())
+      ); // 대소문자 구분없이 매칭
+
       const exampleWordCount = matchedWords.length; // 예시단어 매칭 개수
       const exampleWordRatio = +(exampleWordCount / exampleKeywords.length).toFixed(2); // 예시단어 반영비율
 
