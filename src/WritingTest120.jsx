@@ -11,14 +11,18 @@ export default function WritingTest() {
   const [wordCount, setWordCount] = useState(0);
   const requiredWords = ["friend", "surprised", "dogs"];
   const [displayText, setDisplayText] = useState("");
+  const predefinedText = "A gentle breeze carried the scent of earth and rain, weaving through the quiet streets as the distant hum of city life echoed in the background. The dim glow of streetlights flickered softly, casting long shadows that stretched across the pavement."; // 미리 정해진 문장 삽입
+  const [preTextIndex, setPreTextIndex] = useState(0);
+  const [isPreTextTyping, setIsPreTextTyping] = useState(""); // 타이핑 중인 글자 저장
+  const [preTextTyping, setPreTextTyping] = useState("");   // 타이핑 중인 글자
+  const [originalText, setOriginalText] = useState("");     // 기존 작성 글 보존
 
   const typingText = "...DraftMind is typing..."; //입력중
   const hello = "Hello! I’m 'Draft Mind', an AI designed to help with writing. \n It looks like you’re crafting a story. I’d be happy to assist!"; // 인사말
   const level = "Based on general writing principles and storytelling strategies, I will provide assistance that is generally suitable for writers like you."; // 개인화 수준 명시(낮은 개인화)
-  const fullText = "In general, to develop a story into a more engaging narrative, it would be beneficial to describe the introduction in more detail. This will enhance the immersion of the story. \n I'll give you an example sentence below, so apply it to your writing! \n \n ex 1) 'A gentle breeze carried the scent of earth and rain, weaving through the quiet streets as the distant hum of city life echoed in the background. The dim glow of streetlights flickered softly, casting long shadows that stretched across the pavement.' \n ex 2) 'There was a soft, golden light as the sun dipped below the horizon, painting the sky with streaks of amber and violet. A faint rustling sound came from the corner, breaking the stillness of the evening air.'"; // 도움 내용
-
-  const examplePhrase = ["a gentle breeze", "the scent of earth and rain", "weaving through the quiet streets", "as the distant hum of city life", "echoed in the background", "the dim glow of streetlights", "flickered softly", "casting long shadows", "stretched across the pavement", "a soft, golden light", "the sun dipped below the horizon", "painting the sky with streaks of amber and violet", "A faint rustling sound came from the corner", "breaking the stillness of the evening air"];  // 예시 구문문들
-  const exampleKeywords = ["gentle", "breeze", "carried", "scent", "earth", "rain", "weaving", "quiet", "streets", "distant", "hum", "city", "life", "echoed", "background", "dim", "glow", "streetlights", "flickered", "softly", "casting", "long", "shadows", "stretched", "pavement", "soft", "golden", "light", "sun", "dipped", "horizon", "painting", "sky", "streaks", "amber", "violet", "faint", "rustling", "sound", "came", "corner", "breaking", "stillness", "evening", "air"]; // 예시 단어들
+  const fullText = "In general, to develop a story into a more engaging narrative, it would be beneficial to describe the introduction in more detail. This will enhance the immersion of the story. \n I'll give you an example sentence and apply it to your writing!"; // AI 글쓰기 제안문구
+  const examplePhrase = ["a gentle breeze", "the scent of earth and rain", "weaving through the quiet streets", "as the distant hum of city life", "echoed in the background", "the dim glow of streetlights", "flickered softly", "casting long shadows", "stretched across the pavement"];  // 예시 구문들
+  const exampleKeywords = ["gentle", "breeze", "carried", "scent", "earth", "rain", "weaving", "quiet", "streets", "distant", "hum", "city", "life", "echoed", "background", "dim", "glow", "streetlights", "flickered", "softly", "casting", "long", "shadows", "stretched", "pavement"]; // 예시 단어들
 
   const [typingIndex, setTypingIndex] = useState(0);
   const [helloIndex, setHelloIndex] = useState(0);
@@ -30,7 +34,6 @@ export default function WritingTest() {
   const [isLevelTyping, setIsLevelTyping] = useState(false);
   const [isFullTextTyping, setIsFullTextTyping] = useState(false);
   const [hasTriggeredOnce, setHasTriggeredOnce] = useState(false);
-  const [hasFeedbackStarted, setHasFeedbackStarted] = useState(false); // ✅ 추가: 최초 피드백 시작 여부
 
   const [isInputDisabled, setIsInputDisabled] = useState(false);
   const [showInputLockMessage, setShowInputLockMessage] = useState(false);
@@ -43,8 +46,7 @@ export default function WritingTest() {
 
   // 🔥 입력 잠금 메시지 상태 추가
   useEffect(() => {
-    if (isInputDisabled) setShowInputLockMessage(true);
-    else setShowInputLockMessage(false);
+    setShowInputLockMessage(isInputDisabled);
   }, [isInputDisabled]);
 
   const handleChange = (e) => {
@@ -108,7 +110,6 @@ export default function WritingTest() {
   useEffect(() => {
     if (wordCount >= 80 && !hasTriggeredOnce) {
       setIsInputDisabled(true); // ✅ 입력창 비활성화 추가
-      setHasFeedbackStarted(true); // ✅ 피드백 시작 표시
 
       setDisplayText("");
       setTypingIndex(0);
@@ -123,7 +124,7 @@ export default function WritingTest() {
 
       setHasTriggeredOnce(true);
     }
-  }, [wordCount, hasTriggeredOnce, hasFeedbackStarted]);
+  }, [wordCount, hasTriggeredOnce, text]);
 
   // 입력중.. 문구 타이핑효과
   useEffect(() => {
@@ -195,10 +196,50 @@ export default function WritingTest() {
     if (isFullTextTyping && fullTextIndex >= fullText.length) {
       setTimeout(() => {
         setIsFullTextTyping(false);
-        setIsInputDisabled(false); // ✅ 입력창 다시 활성화
-      }, 1000);
+        setIsPreTextTyping(true);   // ✅ 여기서 타이핑 시작
+      }, 2000);
     }
   }, [fullTextIndex, isFullTextTyping]);
+
+  // 미리 정해진 문장 타이핑효과
+  useEffect(() => {
+    // 타이핑 시작 시점에 기존 글 저장
+    if (isPreTextTyping && preTextIndex === 0) {
+      setOriginalText(text);
+    }
+
+    //타이핑 효과 진행
+    if (isPreTextTyping && preTextIndex < predefinedText.length) {
+      const timer = setTimeout(() => {
+        setPreTextTyping(predefinedText.slice(0, preTextIndex + 1));
+        setPreTextIndex(preTextIndex + 1);
+      }, 50);  // 타이핑 속도 조절
+  
+      return () => clearTimeout(timer);
+    }
+  
+    if (isPreTextTyping && preTextIndex >= predefinedText.length) {
+      setTimeout(() => {
+        if (!originalText.startsWith(predefinedText)) {
+          setText(predefinedText + originalText);   // 최종 텍스트 반영
+        } else {
+          setText(originalText);   // 이미 삽입된 경우 유지
+        }
+
+        // ✅ 여기서 단어 수 갱신
+        const finalText = !originalText.startsWith(predefinedText)
+          ? predefinedText + originalText
+          : originalText;
+
+        const words = finalText.trim().split(/\s+/);
+        setWordCount(words.length);
+
+        setIsPreTextTyping(false);
+        setIsInputDisabled(false);   // 타이핑 끝난 후 입력창 활성화
+      }, 1000);
+    }
+  }, [isPreTextTyping, preTextIndex]);
+  
 
 
   // 🔥 Firestore에 데이터 저장하는 함수 추가
@@ -278,7 +319,7 @@ export default function WritingTest() {
         exampleWords: matchedWords.join(", "), // 예시단어 매칭된 단어들
         examplePhraseCount: examplePhraseCount, // 예시구문 매칭개수
         examplePhraseRatio: examplePhraseRatio, // 예시구문 매칭비율
-        examplePhrase: matchedPhrase.join(", ") // 예시구문 매칭된 구문들
+        examplePhrases: matchedPhrase.join(", ") // 예시구문 매칭된 구문들
       });
 
       alert("✅ Your writing has been submitted!");
@@ -311,7 +352,7 @@ export default function WritingTest() {
 
         <textarea
           style={{ width: "100%", height: "200px", padding: "10px", border: "1px solid #ccc", fontSize: "16px" }}
-          value={text}
+          value={isPreTextTyping ? preTextTyping + originalText : text}
           onChange={(e) => handleChange(e)}
           placeholder="Start writing here..."
           disabled={isInputDisabled} // ✅ 비활성화 반영
