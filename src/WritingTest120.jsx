@@ -24,6 +24,7 @@ export default function WritingTest() {
   const examplePhrase = ["a gentle breeze", "the scent of earth and rain", "weaving through the quiet streets", "as the distant hum of city life", "echoed in the background", "the dim glow of streetlights", "flickered softly", "casting long shadows", "stretched across the pavement"];  // 예시 구문들
   const exampleKeywords = ["gentle", "breeze", "carried", "scent", "earth", "rain", "weaving", "quiet", "streets", "distant", "hum", "city", "life", "echoed", "background", "dim", "glow", "streetlights", "flickered", "softly", "casting", "long", "shadows", "stretched", "pavement"]; // 예시 단어들
 
+  
   const [typingIndex, setTypingIndex] = useState(0);
   const [helloIndex, setHelloIndex] = useState(0);
   const [levelIndex, setLevelIndex] = useState(0);
