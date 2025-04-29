@@ -11,7 +11,7 @@ export default function WritingTest() {
   const [wordCount, setWordCount] = useState(0);
   const requiredWords = ["friend", "surprised", "dogs"];
   const [displayText, setDisplayText] = useState("");
-  const predefinedText = "A gentle breeze carried the scent of earth and rain, weaving through the quiet streets as the distant hum of city life echoed in the background. The dim glow of streetlights flickered softly, casting long shadows that stretched across the pavement."; // 미리 정해진 문장 삽입
+  const predefinedText = "A gentle breeze carried the scent of earth and rain, weaving through the quiet streets as the distant hum of city life echoed in the background. The dim glow of streetlights flickered softly, casting long shadows that stretched across the pavement. "; // 미리 정해진 문장 삽입
   const [preTextIndex, setPreTextIndex] = useState(0);
   const [isPreTextTyping, setIsPreTextTyping] = useState(""); // 타이핑 중인 글자 저장
   const [preTextTyping, setPreTextTyping] = useState("");   // 타이핑 중인 글자
