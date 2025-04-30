@@ -233,10 +233,8 @@ export default function WritingTest() {
           : originalText;
 
         const words = finalText.trim().split(/\s+/);
+        setText(finalText); // 최종 텍스트 반영
         setWordCount(words.length);
-
-        // 💡 추가: handleChange 호출로 UI 강제 갱신
-        handleChange({ target: { value: finalText } });
 
         setIsPreTextTyping(false);
         setIsInputDisabled(false);   // 타이핑 끝난 후 입력창 활성화
