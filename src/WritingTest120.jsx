@@ -235,6 +235,7 @@ export default function WritingTest() {
         const words = finalText.trim().split(/\s+/);
         setText(finalText); // 최종 텍스트 반영
         setWordCount(words.length);
+        handleChange({ target: { value: finalText } });
 
         setIsPreTextTyping(false);
         setIsInputDisabled(false);   // 타이핑 끝난 후 입력창 활성화
@@ -368,15 +369,19 @@ export default function WritingTest() {
       </div>
 
       {/* ✨ Prolific ID 입력 필드 추가 */}
-      <div style={{ width: "80%", textAlign: "left", marginBottom: "10px" }}>
-        <label style={{ fontWeight: "bold", marginRight: "10px" }}>Prolific ID:</label>
+      <div style={{ width: "80%", textAlign: "left", marginBottom: "10px"}}>
+        <label style={{ fontWeight: "bold", marginRight: "10px" }}>SONA ID:</label>
         <input
           type="text"
           value={prolificId}
           onChange={(e) => setProlificId(e.target.value)}
           placeholder="Enter your ID"
-          style={{ padding: "5px", fontSize: "14px", width: "200px" }}
+          style={{ padding: "5px", fontSize: "14px", width: "200px", marginRight: "15px"}}
         />
+
+        <span style={{ fontSize: "16px", color: "gray" }}>
+          Please enter your prolific ID to confirm your participation.
+        </span>
       </div>
 
 
